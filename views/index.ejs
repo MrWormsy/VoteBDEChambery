@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Votez pour Chambé !</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <link rel="stylesheet" href="/stylesheet/style.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+</head>
+
+<header>
+
+</header>
+
+<body>
+
+<section class="section">
+    <div class="container">
+        <div class="notification">
+            Pour votez pour votre liste préférée c'est ici ! Il vous faut seulement votre adresse mail universitaire pour confirmer votre identité ! (vos informations seront détruites après le vote, pour plus d'informations veuillez contacter Michel Jesus).
+        </div>
+
+        <div class="notification">
+            <input class="input" type="text" placeholder="Nom" id="nom"><br/>
+            <input class="input" type="text" placeholder="Prenom" id="prenom"><br/>
+            <input class="input" type="text" placeholder="Fillière + Année (exemple : EBE3)" id="filliere"><br/>
+            <input class="input" type="email" placeholder="Adresse mail universitaire (@etu.univ-smb.fr)" id="email"><br/>
+            <div class="control">
+                <div class="select">
+                    <select id="vote">
+                        <option value="blanc">Vote blanc</option>
+                        <option value="irishtech">Irish’Tech - Liste BDE 2020 Chambéry</option>
+                        <option value="techpaf">Tech'Paf - Liste BDE 2020 Chambéry</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <label class="checkbox">
+                <input type="checkbox" id="checkbox">
+                Je certifie qu'Annecy est la capitale
+            </label>
+            <br>
+            <br>
+            <div class="control">
+                <button class="button is-dark" id="submit">Pré enregistrer mon vote</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>
+
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>
+            <strong>Vote Futur BDE Chambéry</strong>, made by <a href="https://github.com/MrWormsy">Antonin ROSA-MARTIN</a> & <a href="https://github.com/Debzou/">David
+                PETIT</a> with <span class="icon has-text-danger"><i class="fas fa-heart"></i></span> for Chambé la banlieu
+        </p>
+    </div>
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var nom, prenom, filliere, email, vote;
+        $("#submit").click(function () {
+            nom = $("#nom").val();
+            prenom = $("#prenom").val();
+            filliere = $("#filliere").val();
+            email = $("#email").val();
+            vote = $("#vote").val();
+            checkbox = $("#checkbox").is(":checked");
+
+            // On regarde que les champs ne sont pas vides
+            if (nom === '' || prenom === '' || filliere === '' || email === '' || vote === '') {
+                alert("Tous les champs doivent être remplis");
+                return;
+            }
+
+            // On regarde si l'email a déjà été utilisé...
+            // First we need to check if the email is already used
+            $.getJSON('/api/email/' + email.toLowerCase(), function (data) {
+                if (data.length == 0) {
+
+                    // On fait quelques vérifications du genre que l'email est bien conforme
+                    if (email.includes('@etu.univ-smb.fr')) {
+                        $.post("/vote", {
+                            nom: nom,
+                            prenom: prenom,
+                            filliere: filliere,
+                            email: email,
+                            vote: vote
+                        }, function (data) {
+                            if (data === 'done') {
+                                window.location.href = "/confirmation";
+                            }
+                        });
+                    } else {
+                        alert("Votre adresse email n'est pas conforme, elle doit être de la forme prenom.nom@etu.univ-smb.fr");
+                    }
+
+                } else {
+                    alert("L'adresse email est déjà utilisée");
+                }
+            });
+        });
+    });
+</script>

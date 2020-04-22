@@ -1,0 +1,20 @@
+{
+  "name": "vote_bde_chambery",
+  "version": "1.0.0",
+  "description": "A little Website to let the students vote for the new Student Council (Due to the Corona Virus)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Antonin ROSA-MARTIN",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.3",
+    "nodemailer": "^6.4.6",
+    "path": "^0.12.7",
+    "uuid": "^7.0.2"
+  }
+}

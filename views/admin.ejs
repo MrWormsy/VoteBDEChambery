@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <link rel="stylesheet" href="/stylesheet/style.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+</head>
+
+<section class="section">
+    <h1 class="title">LES VP dominent le monde surtout David PETIT c'est un mec extraordinaire</h1>
+        <table class="table">
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Filère</th>
+                <th>Email</th>
+                <th>Vote</th>
+                <th>emailconfirmation</th>
+                <th>Confirmation admin</th>
+                <th>Confirmation</th>
+              </tr>
+            </thead>
+            <tbody id="tbody">          
+            </tbody>
+          </table>
+</section>
+
+<!-- get votes -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script>
+    function confirme(id){
+        $.ajax({ url: `/vote/${id}`, method: "PUT" }).then(function(data){
+            document.getElementById(`tr_${id}`).remove();
+        })
+    }
+</script>
+
+<script> 
+
+$( document ).ready(function() {
+    $.get("/votes",function(data){
+        let container = $("#tbody");
+        let values = "";
+        document.getElementById("tbody").innerHTML = "";
+        data.forEach(function (d) {
+            console.log(d);
+            
+            values += `<tr id="tr_${d._id}" > <td>${d.nom}</td><td>${d.prenom}</td><td>${d.filliere}</td><td> ${d.email} </td><td> ${d.vote}</td><td> ${d.emailconfirmation} </td><td> ${d.adminconfirmation} </td><td><button class="button is-danger is-light"  id="${d._id}"  onClick="confirme(this.id)">Je confirme !</button></td></tr>`
+        });
+        $(container).append(values);
+    }); 
+
+
+});
+
+
+  
+</script>
+  
